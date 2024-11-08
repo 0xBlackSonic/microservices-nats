@@ -13,6 +13,7 @@ import { NotFoundError } from "./errors/not-found-error";
 import { credentialsRoutes } from "./modules/credentials";
 import { protectedRoutes } from "./modules/protected";
 import { commonRoutes } from "./modules/common";
+import { emailRoutes } from "./modules/email";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use(authUser);
 
 app.use(credentialsRoutes);
 app.use(commonRoutes);
+app.use(emailRoutes);
 app.use(protectedRoutes);
 
 app.all("*", (req, res) => {

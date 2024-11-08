@@ -1,6 +1,8 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 
+jest.mock("../services/mail-service");
+
 let mongo: MongoMemoryServer | undefined;
 
 // Initialize MongoDB memory server
@@ -10,6 +12,8 @@ beforeAll(async () => {
   process.env.JWT_EXPIRATION = "1m";
   process.env.REFRESH_SECRET_KEY = "test-refresh-key";
   process.env.REFRESH_EXPIRATION = "10m";
+  process.env.ONE_USE_TOKEN_EXPIRARION = "1000";
+  process.env.SEND_EMAIL = "true";
 
   mongo = await MongoMemoryServer.create();
 
