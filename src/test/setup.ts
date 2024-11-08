@@ -8,13 +8,6 @@ let mongo: MongoMemoryServer | undefined;
 // Initialize MongoDB memory server
 // Connect mongoose
 beforeAll(async () => {
-  process.env.JWT_SECRET_KEY = "test-jwt-key";
-  process.env.JWT_EXPIRATION = "1m";
-  process.env.REFRESH_SECRET_KEY = "test-refresh-key";
-  process.env.REFRESH_EXPIRATION = "10m";
-  process.env.ONE_USE_TOKEN_EXPIRARION = "1000";
-  process.env.SEND_EMAIL = "true";
-
   mongo = await MongoMemoryServer.create();
 
   await mongoose.connect(mongo.getUri(), {});
