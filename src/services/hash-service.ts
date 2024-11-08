@@ -3,7 +3,7 @@ import { promisify } from "util";
 
 const asyncFunc = promisify(scrypt);
 
-export class HashUtils {
+export class HashService {
   static async toHash(password: string) {
     const salt = randomBytes(8).toString("hex");
     const buf = (await asyncFunc(password, salt, 64)) as Buffer;
@@ -22,5 +22,11 @@ export class HashUtils {
     return createHmac("sha256", process.env.REFRESH_SECRET_KEY!)
       .update(token)
       .digest("hex");
+  }
+
+  static generateAccessToken() {
+    const rand = randomBytes(32).toString("hex");
+
+    return createHmac("sha256", "secretHashKey").update(rand).digest("hex");
   }
 }

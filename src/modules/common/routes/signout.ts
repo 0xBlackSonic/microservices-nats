@@ -4,7 +4,7 @@ import { authUser } from "../../../middlewares/auth-user";
 
 const route = express.Router();
 
-route.post("/api/users/signout", async (req: Request, res: Response) => {
+route.post("/api/auth/signout", async (req: Request, res: Response) => {
   req.authUser &&
     (await User.removeSession(req.authUser.id, req.session!.refresh));
 

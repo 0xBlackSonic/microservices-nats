@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { TokenExpiredError } from "jsonwebtoken";
 
-import { JwtUtils, Payload } from "../helpers/jwt-utils";
+import { jwtService, Payload } from "../services/jwt-service";
 import { User } from "../models/user";
-import { HashUtils } from "../helpers/hash-utils";
+import { HashService } from "../services/hash-service";
 
 declare global {
   namespace Express {
@@ -34,25 +34,25 @@ export const authUser = async (
   }
 
   try {
-    const payload = JwtUtils.verifyJWT(req.session!.jwt) as Payload;
+    const payload = jwtService.verifyJWT(req.session!.jwt) as Payload;
 
     req.authUser = payload;
   } catch (err) {
     if (err instanceof TokenExpiredError) {
       try {
-        const payload = JwtUtils.verifyRefresh(req.session!.refresh);
+        const payload = jwtService.verifyRefresh(req.session!.refresh);
 
         const user = await User.findOne({
           _id: payload.id,
-          "tokens.token": HashUtils.tokenHash(req.session!.refresh),
+          "sessions.sessionToken": HashService.tokenHash(req.session!.refresh),
         });
 
         if (user) {
-          req.session.jwt = user.generateAccessToken();
+          req.session.jwt = user.generateJwtToken();
           req.authUser = payload;
         }
       } catch (err) {
-        const { id } = JwtUtils.extractPayload(req.session!.refresh);
+        const { id } = jwtService.extractPayload(req.session!.refresh);
 
         await User.removeSession(id, req.session!.refresh);
       }

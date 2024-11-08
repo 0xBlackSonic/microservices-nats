@@ -5,7 +5,7 @@ export interface Payload {
   email: string;
 }
 
-class JwtClass {
+class JwtService {
   generateJWT(payload: Payload) {
     return jwt.sign(payload, process.env.JWT_SECRET_KEY!, {
       expiresIn: process.env.JWT_EXPIRATION,
@@ -36,6 +36,12 @@ class JwtClass {
   extractPayload(token: string) {
     return jwt.decode(token) as Payload;
   }
+
+  getExpirationTime(token: string) {
+    const { exp } = jwt.decode(token) as JwtPayload;
+
+    return exp;
+  }
 }
 
-export const JwtUtils = new JwtClass();
+export const jwtService = new JwtService();

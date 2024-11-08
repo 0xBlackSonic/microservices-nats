@@ -10,9 +10,9 @@ import { authUser } from "./middlewares/auth-user";
 
 import { NotFoundError } from "./errors/not-found-error";
 
-import { healthCheckRoutes } from "./modules/health-check";
-import { authRoutes } from "./modules/auth";
+import { credentialsRoutes } from "./modules/credentials";
 import { protectedRoutes } from "./modules/protected";
+import { commonRoutes } from "./modules/common";
 
 dotenv.config();
 
@@ -27,8 +27,8 @@ app.use(
 
 app.use(authUser);
 
-app.use(healthCheckRoutes);
-app.use(authRoutes);
+app.use(credentialsRoutes);
+app.use(commonRoutes);
 app.use(protectedRoutes);
 
 app.all("*", (req, res) => {
