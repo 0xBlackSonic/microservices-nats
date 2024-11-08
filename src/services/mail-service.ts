@@ -10,10 +10,6 @@ export interface MailOptions {
 class MailService {
   private _transporter?: Transporter;
 
-  /*
-    If need to use another port than 587, the port atribute
-    must be defined
-  */
   async initializeMailServer(
     url: string,
     username: string,

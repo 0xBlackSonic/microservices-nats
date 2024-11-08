@@ -4,6 +4,7 @@ import { app } from "../../../../app";
 import { User } from "../../../../models/user";
 import { AuthProviders } from "../../../../enums/providers";
 import { mailService } from "../../../../services/mail-service";
+import { MailAdapter } from "../../../../adapters/mail";
 
 const sleep = (ms: number): Promise<void> =>
   new Promise((resolve, reject) => {
@@ -91,8 +92,8 @@ describe("Email Auth - Signin tests", () => {
     );
   });
 
-  it("calls the email send function and returns a 200 response", async () => {
-    if (process.env.SEND_EMAIL === "true") {
+  if (MailAdapter.isActive()) {
+    it("calls the email send function and returns a 200 response", async () => {
       await request(app)
         .post("/api/auth/email/signin")
         .send({
@@ -101,6 +102,6 @@ describe("Email Auth - Signin tests", () => {
         .expect(200);
 
       expect(mailService.send).toHaveBeenCalled();
-    }
-  });
+    });
+  }
 });

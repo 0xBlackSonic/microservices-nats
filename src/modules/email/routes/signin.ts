@@ -5,6 +5,8 @@ import { User } from "../../../models/user";
 import { AuthProviders } from "../../../enums/providers";
 import { mailService } from "../../../services/mail-service";
 import { MailAdapter } from "../../../adapters/mail";
+import { emailConfig } from "../config";
+import { EmailSendError } from "../../../errors/email-send-error";
 
 const route = express.Router();
 
@@ -28,15 +30,14 @@ route.post(
     if (MailAdapter.isActive()) {
       try {
         await mailService.send({
-          from: "no-reply@resend.dev",
+          from: emailConfig.from,
           to: user.email,
-          subject: "Email access token test",
-          html: `<html><body><h2>Esto es una prueba...</h2><p><a href="https://google.com">https://some-url.com/?email=${
-            user.email
-          }&token=${userAccount!.accessToken}</a></p></body></html>`,
+          subject: emailConfig.subject,
+          html: emailConfig.template(user.email, userAccount!.accessToken),
         });
       } catch (err) {
         console.log(err);
+        throw new EmailSendError();
       }
     }
 
