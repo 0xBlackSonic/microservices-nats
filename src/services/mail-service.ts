@@ -10,9 +10,21 @@ export interface MailOptions {
 class MailService {
   private _transporter?: Transporter;
 
-  async initializeMailServer(url: string, username: string, password: string) {
+  /*
+    If need to use another port than 587, the port atribute
+    must be defined
+  */
+  async initializeMailServer(
+    url: string,
+    username: string,
+    password: string,
+    port: number,
+    secure: boolean
+  ) {
     this._transporter = nodemailer.createTransport({
       host: url,
+      port,
+      secure,
       auth: {
         user: username,
         pass: password,

@@ -4,6 +4,7 @@ import { requestValidation } from "../../../middlewares/request-validation";
 import { User } from "../../../models/user";
 import { AuthProviders } from "../../../enums/providers";
 import { mailService } from "../../../services/mail-service";
+import { MailAdapter } from "../../../adapters/mail";
 
 const route = express.Router();
 
@@ -24,7 +25,7 @@ route.post(
       (acc) => acc.provider === AuthProviders.Email
     );
 
-    if (process.env.SEND_EMAIL === "true") {
+    if (MailAdapter.isActive()) {
       try {
         await mailService.send({
           from: "no-reply@resend.dev",
