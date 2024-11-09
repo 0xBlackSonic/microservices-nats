@@ -5,15 +5,15 @@ import cookieSession from "cookie-session";
 
 import * as dotenv from "dotenv";
 
-import { errorHandler } from "./middlewares/error-handler";
-import { authUser } from "./middlewares/auth-user";
+import { errorHandler } from "./middlewares/error-handler.middleware";
+import { authUser } from "./middlewares/auth-user.middleware";
 
-import { NotFoundError } from "./errors/not-found-error";
+import { NotFoundError } from "./errors/not-found.error";
 
-import { credentialsRoutes } from "./modules/credentials";
-import { protectedRoutes } from "./modules/protected";
-import { commonRoutes } from "./modules/common";
-import { emailRoutes } from "./modules/email";
+import { signupRouter } from "./routes/signup.route";
+import { signinRouter } from "./routes/signin.route";
+import { signoutRouter } from "./routes/signout.route";
+import { protectedRouter } from "./routes/protected.route";
 
 dotenv.config();
 
@@ -28,10 +28,10 @@ app.use(
 
 app.use(authUser);
 
-app.use(credentialsRoutes);
-app.use(commonRoutes);
-app.use(emailRoutes);
-app.use(protectedRoutes);
+app.use(signupRouter);
+app.use(signinRouter);
+app.use(signoutRouter);
+app.use(protectedRouter);
 
 app.all("*", (req, res) => {
   throw new NotFoundError();

@@ -1,6 +1,6 @@
 import { app } from "./app";
-import { DatabaseAdapter } from "./adapters/database";
-import { MailAdapter } from "./adapters/mail";
+import { DatabaseAdapter } from "./adapters/database.adapter";
+import { MailAdapter } from "./adapters/mail.adapter";
 
 const start = async () => {
   await DatabaseAdapter.connect();
