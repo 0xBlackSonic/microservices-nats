@@ -43,47 +43,31 @@ export class SigninService {
       (acc) => acc.provider === this._provider
     )!;
 
-    switch (this._provider) {
-      case AuthProviders.Credentials:
-        await this.verifyCredentials(password, userAccount!);
-        break;
-      case AuthProviders.Email:
-        await this.verifyEmail(password, userAccount);
-        break;
-      default:
-        throw new BadRequestError("Provider does not exist!");
-    }
+    await this._verifyAccess(password, userAccount!);
 
     await this._generateSessionTokens();
   }
 
-  private async verifyCredentials(
+  private async _verifyAccess(
     password: string,
     userAccount: IUserAccount
   ): Promise<void> {
     if (!(await HashUtils.verify(userAccount.accessToken, password))) {
       throw new BadRequestError("Credentials are invalid");
     }
-  }
 
-  private async verifyEmail(
-    password: string,
-    userAccount: IUserAccount
-  ): Promise<void> {
-    if (!userAccount.active) {
-      throw new BadRequestError("Access Token already used");
+    if (this._provider !== AuthProviders.Credentials) {
+      if (!userAccount.active) {
+        throw new BadRequestError("Access Token already used");
+      }
+
+      if (userAccount.expires! < Date.now()) {
+        throw new BadRequestError("Access Token expired");
+      }
+
+      userAccount.active = false;
+      await this._user!.save();
     }
-
-    if (userAccount.expires! < Date.now()) {
-      throw new BadRequestError("Access Token expired");
-    }
-
-    if (!(await HashUtils.verify(userAccount.accessToken, password))) {
-      throw new BadRequestError("Credentials are invalid");
-    }
-
-    userAccount.active = false;
-    await this._user!.save();
   }
 
   private async _generateSessionTokens() {
