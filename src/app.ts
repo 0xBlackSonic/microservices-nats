@@ -3,8 +3,6 @@ import "express-async-errors";
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
 
-import * as dotenv from "dotenv";
-
 import { errorHandler } from "./middlewares/error-handler.middleware";
 import { authUser } from "./middlewares/auth-user.middleware";
 
@@ -14,8 +12,6 @@ import { signupRouter } from "./routes/signup.route";
 import { signinRouter } from "./routes/signin.route";
 import { signoutRouter } from "./routes/signout.route";
 import { protectedRouter } from "./routes/protected.route";
-
-dotenv.config();
 
 const app = express();
 app.use(json());

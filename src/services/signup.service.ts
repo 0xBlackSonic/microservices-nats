@@ -1,10 +1,10 @@
-import { MailAdapter } from "../adapters/mail.adapter";
 import { AuthProviders } from "../enums/providers.enum";
 import { BadRequestError } from "../errors/bad-request.error";
 import { EmailSendError } from "../errors/email-send.error";
 import { User, UserDoc } from "../models/user.model";
 import { mailService } from "./mail.service";
-import { emailConfig } from "./configs/email.config";
+import { emailConfig } from "../configs/email.config";
+import { SMTPLoader } from "../loaders/mail.loader";
 
 export class SignupService {
   private _user?: UserDoc;
@@ -100,7 +100,7 @@ export class SignupService {
     this._user = user;
     this._accessToken = accessToken;
 
-    if (MailAdapter.isActive()) {
+    if (SMTPLoader.isActive()) {
       try {
         await mailService.send({
           from: emailConfig.from,

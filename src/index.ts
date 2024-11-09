@@ -1,13 +1,14 @@
 import { app } from "./app";
-import { DatabaseAdapter } from "./adapters/database.adapter";
-import { MailAdapter } from "./adapters/mail.adapter";
+import { config } from "./configs";
+import { DatabaseLoader } from "./loaders/database.loader";
+import { SMTPLoader } from "./loaders/mail.loader";
 
 const start = async () => {
-  await DatabaseAdapter.connect();
-  await MailAdapter.connect();
+  await DatabaseLoader.connect();
+  await SMTPLoader.connect();
 
-  app.listen(3000, () => {
-    console.log("Server listen on port 3000");
+  app.listen(config.port, () => {
+    console.log(`Server listen on port 3000 [${config.environment}]`);
   });
 };
 

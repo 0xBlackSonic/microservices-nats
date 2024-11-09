@@ -3,8 +3,8 @@ import request from "supertest";
 import { app } from "../../app";
 import { AuthProviders } from "../../enums/providers.enum";
 import { User } from "../../models/user.model";
-import { MailAdapter } from "../../adapters/mail.adapter";
 import { mailService } from "../../services/mail.service";
+import { SMTPLoader } from "../../loaders/mail.loader";
 
 const sleep = (ms: number): Promise<void> =>
   new Promise((resolve, reject) => {
@@ -183,7 +183,7 @@ describe("Auth Signup [With Email]", () => {
     );
   });
 
-  if (MailAdapter.isActive()) {
+  if (SMTPLoader.isActive()) {
     it("calls the email send function and returns a 200 response", async () => {
       await request(app)
         .post("/api/auth/signup")

@@ -1,4 +1,5 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { config } from "../configs";
 
 export interface Payload {
   id: string;
@@ -7,28 +8,25 @@ export interface Payload {
 
 class JwtUtils {
   generateJWT(payload: Payload) {
-    return jwt.sign(payload, process.env.JWT_SECRET_KEY!, {
-      expiresIn: process.env.JWT_EXPIRATION,
+    return jwt.sign(payload, config.sessions.jwtKey!, {
+      expiresIn: config.sessions.jwtExpire,
     });
   }
 
   generateRefresh(payload: Payload) {
-    return jwt.sign(payload, process.env.REFRESH_SECRET_KEY!, {
-      expiresIn: process.env.REFRESH_EXPIRATION,
+    return jwt.sign(payload, config.sessions.refreshKey!, {
+      expiresIn: config.sessions.refreshExpire,
     });
   }
 
   verifyJWT(token: string) {
-    const payload = jwt.verify(token, process.env.JWT_SECRET_KEY!) as Payload;
+    const payload = jwt.verify(token, config.sessions.jwtKey!) as Payload;
 
     return payload;
   }
 
   verifyRefresh(token: string) {
-    const payload = jwt.verify(
-      token,
-      process.env.REFRESH_SECRET_KEY!
-    ) as Payload;
+    const payload = jwt.verify(token, config.sessions.refreshKey!) as Payload;
 
     return payload;
   }

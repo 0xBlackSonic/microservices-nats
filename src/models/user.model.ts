@@ -3,6 +3,7 @@ import { HashUtils } from "../helpers/hash.utils";
 import { UserStatus } from "../enums/user-status.enum";
 import { jwtUtils } from "../helpers/jwt.utils";
 import { AuthProviders } from "../enums/providers.enum";
+import { config } from "../configs";
 
 interface UserAttrs {
   provider: AuthProviders;
@@ -127,7 +128,7 @@ userSchema.statics.build = async (attrs: UserAttrs) => {
 
 userSchema.statics.buildSession = async (attrs: UserAttrs) => {
   const accessToken = HashUtils.generateAccessToken();
-  const expires = Date.now() + Number(process.env.ONE_USE_TOKEN_EXPIRARION!);
+  const expires = Date.now() + config.sessions.oneUseTokenExpires!;
 
   const user = await User.build({
     provider: attrs.provider,

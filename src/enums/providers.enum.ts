@@ -1,5 +1,4 @@
 export enum AuthProviders {
-  Credentials = "credential",
+  Credentials = "credentials",
   Email = "email",
-  TwoFactor = "twoFactor",
 }

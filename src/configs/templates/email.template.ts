@@ -5,22 +5,7 @@ interface ITemplate {
   accessToken: string;
 }
 
-export const emailConfig = {
-  from: "no-reply@resend.dev",
-  subject: "Passwordless Email SignIn (Test)",
-  baseUrl: "https://some-frontend-url.com",
-  verificationPath: "/auth/verify",
-  template: function (email: string, accessToken: string) {
-    return htmlTemplate({
-      baseUrl: this.baseUrl,
-      path: this.verificationPath,
-      email,
-      accessToken,
-    });
-  },
-};
-
-const htmlTemplate = (data: ITemplate) => {
+export const htmlTemplate = (data: ITemplate) => {
   return `
     <body style="background: #f9f9f9;">
       <table width="100%" border="0" cellspacing="20" cellpadding="0" style="background: #fff; max-width: 600px; margin: auto; border-radius: 10px;">
