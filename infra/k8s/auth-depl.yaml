@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: microservices/auth
+          env:
+            - name: ENVIRONMENT
+              value: "development"
+            - name: PORT
+              value: "3000"
+            - name: MONGODB_HOST
+              value: "auth-mongo-srv:27017"
+            - name: MONGODB_DATABASE
+              value: "test"
+            - name: ONE_USE_TOKEN_EXPIRARION
+              value: "120000"
+            - name: JWT_SECRET_KEY
+              value: "5up3r-53cr37-jw7-k3y"
+            - name: JWT_EXPIRATION
+              value: "1m"
+            - name: REFRESH_SECRET_KEY
+              value: "5up3r-53cr37-r3fre5h-k3y"
+            - name: REFRESH_EXPIRATION
+              value: 30m
+            - name: SEND_EMAIL
+              value: "true"
+            - name: SMTP_URL
+              value: "smtp.resend.com"
+            - name: SMTP_PORT
+              value: "587"
+            - name: SMTP_SECURE
+              value: "false"
+            - name: SMTP_USERNAME
+              value: "resend"
+            - name: SMTP_PASSWORD
+              value: "re_7d4ZcM1m_8AsJ34rZY7jUrwA2pmfYUFHu"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec:
+  selector:
+    app: auth
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
