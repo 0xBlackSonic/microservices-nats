@@ -1,10 +1,11 @@
 import { AuthProviders } from "../enums/providers.enum";
 import { BadRequestError } from "../errors/bad-request.error";
-import { EmailSendError } from "../errors/email-send.error";
 import { User, UserDoc } from "../models/user.model";
-import { mailService } from "./mail.service";
-import { emailConfig } from "../configs/email.config";
-import { SMTPLoader } from "../loaders/mail.loader";
+
+export interface IEmailResponse {
+  user: UserDoc;
+  accessToken: string;
+}
 
 export class SignupService {
   private _user?: UserDoc;
@@ -15,23 +16,16 @@ export class SignupService {
 
   constructor(private _provider: AuthProviders) {}
 
-  get user() {
+  get user(): UserDoc | IEmailResponse {
     if (!this._user) {
       throw new BadRequestError("User is not defined");
     }
+
     if (this._provider !== AuthProviders.Credentials) {
-      return { user: this._user, accessToken: this._accessToken };
+      return { user: this._user, accessToken: this._accessToken! };
     } else {
       return this._user;
     }
-  }
-
-  get accessToken() {
-    if (!this._accessToken) {
-      throw new BadRequestError("AccessToken is not defined");
-    }
-
-    return this._accessToken;
   }
 
   get sessionTokens() {
@@ -99,20 +93,6 @@ export class SignupService {
 
     this._user = user;
     this._accessToken = accessToken;
-
-    if (SMTPLoader.isActive()) {
-      try {
-        await mailService.send({
-          from: emailConfig.from,
-          to: user.email,
-          subject: emailConfig.subject,
-          html: emailConfig.template(this._user.email, this._accessToken),
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
     this._responseCode = 200;
   }
 

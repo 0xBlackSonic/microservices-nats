@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { config } from "../configs";
 
 export class DatabaseLoader {
-  static async connect() {
+  async connect() {
     try {
       if (!config.db.host || !config.db.database) {
         throw new Error("MongoDB host and database must be defined");
@@ -25,3 +25,5 @@ export class DatabaseLoader {
     }
   }
 }
+
+export const databaseLoader = new DatabaseLoader();
