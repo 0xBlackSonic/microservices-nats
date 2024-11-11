@@ -27,11 +27,17 @@ spec:
             - name: ONE_USE_TOKEN_EXPIRARION
               value: "120000"
             - name: JWT_SECRET_KEY
-              value: "5up3r-53cr37-jw7-k3y"
+              valueFrom:
+                secretKeyRef:
+                  name: microservices-test
+                  key: JWT_SECRET_KEY
             - name: JWT_EXPIRATION
               value: "1m"
             - name: REFRESH_SECRET_KEY
-              value: "5up3r-53cr37-r3fre5h-k3y"
+              valueFrom:
+                secretKeyRef:
+                  name: microservices-test
+                  key: REFRESH_SECRET_KEY
             - name: REFRESH_EXPIRATION
               value: 30m
             - name: SEND_EMAIL
@@ -45,9 +51,15 @@ spec:
             - name: SMTP_SECURE
               value: "false"
             - name: SMTP_USERNAME
-              value: "resend"
+              valueFrom:
+                secretKeyRef:
+                  name: microservices-test
+                  key: SMTP_USERNAME
             - name: SMTP_PASSWORD
-              value: "re_7d4ZcM1m_8AsJ34rZY7jUrwA2pmfYUFHu"
+              valueFrom:
+                secretKeyRef:
+                  name: microservices-test
+                  key: SMTP_PASSWORD
 
 ---
 apiVersion: v1
