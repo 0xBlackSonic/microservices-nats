@@ -26,4 +26,7 @@ export const config = {
     username: process.env.SMTP_USERNAME,
     password: process.env.SMTP_PASSWORD,
   },
+  nats: {
+    url: process.env.NATS_URL,
+  },
 };

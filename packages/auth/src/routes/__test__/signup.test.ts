@@ -3,8 +3,8 @@ import request from "supertest";
 import { app } from "../../app";
 import { AuthProviders } from "../../enums/providers.enum";
 import { User } from "../../models/user.model";
-import { mailService } from "../../services/mail.service";
 import { config } from "../../configs";
+import { AuthEmailSignupPublisher } from "@goblit/shared";
 
 const sleep = (ms: number): Promise<void> =>
   new Promise((resolve, reject) => {
@@ -193,7 +193,7 @@ describe("Auth Signup [With Email]", () => {
         })
         .expect(200);
 
-      expect(mailService.send).toHaveBeenCalled();
+      expect(AuthEmailSignupPublisher.prototype.publish).toHaveBeenCalled();
     });
   }
 });

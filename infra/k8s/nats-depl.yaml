@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nats-depl
+spec:
+  selector:
+    matchLabels:
+      app: nats
+  serviceName: "nats"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nats
+    spec:
+      containers:
+        - name: nats
+          image: nats
+          args: ["--jetstream"]
+          ports:
+            - name: client
+              containerPort: 4222
+            - name: cluster
+              containerPort: 6222
+            - name: monitor
+              containerPort: 8222
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats-srv
+spec:
+  selector:
+    app: nats
+  #clusterIP: None
+  ports:
+    - name: client
+      port: 4222
+    - name: cluster
+      port: 6222

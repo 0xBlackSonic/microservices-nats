@@ -1,7 +1,11 @@
+import { AuthEmailSignupPublisher } from "@goblit/shared";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 
 jest.mock("../services/mail.service");
+jest.mock("../loaders/nats.loader");
+
+AuthEmailSignupPublisher.prototype.publish = jest.fn();
 
 let mongo: MongoMemoryServer | undefined;
 

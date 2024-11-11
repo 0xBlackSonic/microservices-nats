@@ -1,10 +1,12 @@
 import express, { Request, Response } from "express";
-import { requestValidation } from "../middlewares/request-validation.middleware";
+import { AuthEmailSignupPublisher } from "@goblit/shared";
+
 import { signupValidationsRules } from "./validations/signup.validation";
+import { requestValidation } from "../middlewares/request-validation.middleware";
 import { IEmailResponse, SignupService } from "../services/signup.service";
-import { mailService } from "../services/mail.service";
-import { emailConfig } from "../configs/email.config";
 import { AuthProviders } from "../enums/providers.enum";
+import { natsLoader } from "../loaders/nats.loader";
+import { config } from "../configs";
 
 const route = express.Router();
 
@@ -19,14 +21,10 @@ route.post(
     await userInstance.buildUser(email, password);
 
     provider === AuthProviders.Email &&
-      (await mailService.send({
-        from: emailConfig.signup.from,
-        to: email,
-        subject: emailConfig.signup.subject,
-        html: emailConfig.signup.template(
-          email,
-          (userInstance.user as IEmailResponse).accessToken
-        ),
+      config.smtp.active &&
+      (await new AuthEmailSignupPublisher(natsLoader.client).publish({
+        email,
+        accessToken: (userInstance.user as IEmailResponse).accessToken,
       }));
 
     req.session = userInstance.sessionTokens;

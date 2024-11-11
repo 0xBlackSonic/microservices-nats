@@ -1,0 +1,26 @@
+{
+  "name": "@goblit/shared",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "files": [
+    "build/**/*"
+  ],
+  "scripts": {
+    "clean": "del ./build/*",
+    "build": "npm run clean && tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "del-cli": "^6.0.0",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@nats-io/jetstream": "^3.0.0-26",
+    "@nats-io/nats-core": "^3.0.0-38",
+    "@nats-io/transport-node": "^3.0.0-24"
+  }
+}
