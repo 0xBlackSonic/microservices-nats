@@ -3,8 +3,8 @@ import { CustomError } from "./custom.error";
 export class AuthenticationError extends CustomError {
   errorCode = 401;
 
-  constructor() {
-    super("Authentication error");
+  constructor(public message: string) {
+    super(message);
 
     Object.setPrototypeOf(this, AuthenticationError.prototype);
   }
@@ -12,7 +12,7 @@ export class AuthenticationError extends CustomError {
   serializeErrors() {
     return [
       {
-        message: "Authentication error",
+        message: this.message,
       },
     ];
   }

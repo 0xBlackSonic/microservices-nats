@@ -1,5 +1,5 @@
+import { requireAuth } from "@goblit/shared";
 import express, { Request, Response } from "express";
-import { requireAuth } from "../middlewares/require-auth.middleware";
 
 const route = express.Router();
 

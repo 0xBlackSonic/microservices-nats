@@ -1,5 +1,5 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { config } from "../configs";
+import { config } from "../config";
 
 export interface Payload {
   id: string;

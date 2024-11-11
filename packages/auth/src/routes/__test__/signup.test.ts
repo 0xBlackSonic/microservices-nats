@@ -4,7 +4,7 @@ import { app } from "../../app";
 import { AuthProviders } from "../../enums/providers.enum";
 import { User } from "../../models/user.model";
 import { config } from "../../configs";
-import { AuthEmailSignupPublisher } from "@goblit/shared";
+import { AuthEmailSignupPublisher } from "../../events/publishers/auth-email-signup.publisher";
 
 const sleep = (ms: number): Promise<void> =>
   new Promise((resolve, reject) => {

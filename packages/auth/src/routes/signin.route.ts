@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
+import { requestValidation } from "@goblit/shared";
+
 import { signinValidationRules } from "./validations/signin.validation";
-import { requestValidation } from "../middlewares/request-validation.middleware";
 import { SigninService } from "../services/signin.service";
 
 const route = express.Router();

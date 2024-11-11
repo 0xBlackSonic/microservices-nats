@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
+import { jwtUtils } from "@goblit/shared";
+
 import { HashUtils } from "../helpers/hash.utils";
 import { UserStatus } from "../enums/user-status.enum";
-import { jwtUtils } from "../helpers/jwt.utils";
 import { AuthProviders } from "../enums/providers.enum";
 import { config } from "../configs";
 

@@ -1,6 +1,7 @@
-import { AuthEmailSignupPublisher } from "@goblit/shared";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
+
+import { AuthEmailSignupPublisher } from "../events/publishers/auth-email-signup.publisher";
 
 jest.mock("../services/mail.service");
 jest.mock("../loaders/nats.loader");

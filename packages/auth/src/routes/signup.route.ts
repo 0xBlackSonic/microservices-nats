@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
+import { requestValidation } from "@goblit/shared";
 
 import { signupValidationsRules } from "./validations/signup.validation";
-import { requestValidation } from "../middlewares/request-validation.middleware";
 import { IEmailResponse, SignupService } from "../services/signup.service";
 import { AuthProviders } from "../enums/providers.enum";
 import { natsLoader } from "../loaders/nats.loader";

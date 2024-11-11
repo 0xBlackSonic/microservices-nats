@@ -17,7 +17,11 @@ export const requireAuth = async (
   next: NextFunction
 ) => {
   if (!req.authUser) {
-    throw new AuthenticationError();
+    throw new AuthenticationError("Session data missing");
+  }
+
+  if (req.jwtExpired) {
+    throw new AuthenticationError("JWT expired");
   }
 
   next();

@@ -2,13 +2,12 @@ import { NextFunction, Request, Response } from "express";
 import { TokenExpiredError } from "jsonwebtoken";
 
 import { jwtUtils, Payload } from "../helpers/jwt.utils";
-import { User } from "../models/user.model";
-import { HashUtils } from "../helpers/hash.utils";
 
 declare global {
   namespace Express {
     interface Request {
       authUser: Payload;
+      jwtExpired: boolean;
     }
   }
 }
@@ -33,29 +32,18 @@ export const authUser = async (
     return next();
   }
 
+  let payload: Payload;
+
   try {
-    const payload = jwtUtils.verifyJWT(req.session!.jwt) as Payload;
+    payload = jwtUtils.verifyJWT(req.session!.jwt) as Payload;
 
     req.authUser = payload;
   } catch (err) {
     if (err instanceof TokenExpiredError) {
-      try {
-        const payload = jwtUtils.verifyRefresh(req.session!.refresh);
+      payload = jwtUtils.extractPayload(req.session!.jwt) as Payload;
 
-        const user = await User.findOne({
-          _id: payload.id,
-          "sessions.sessionToken": HashUtils.tokenHash(req.session!.refresh),
-        });
-
-        if (user) {
-          req.session.jwt = user.generateJwtToken();
-          req.authUser = payload;
-        }
-      } catch (err) {
-        const { id } = jwtUtils.extractPayload(req.session!.refresh);
-
-        await User.removeSession(id, req.session!.refresh);
-      }
+      req.authUser = payload;
+      req.jwtExpired = true;
     }
   }
 

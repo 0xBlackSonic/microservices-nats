@@ -12,10 +12,6 @@ export const config = {
     password: process.env.MONGODB_PASSWORD,
   },
   sessions: {
-    jwtKey: process.env.JWT_SECRET_KEY,
-    jwtExpire: process.env.JWT_EXPIRATION,
-    refreshKey: process.env.REFRESH_SECRET_KEY,
-    refreshExpire: process.env.REFRESH_EXPIRATION,
     oneUseTokenExpires: Number(process.env.ONE_USE_TOKEN_EXPIRARION),
   },
   smtp: {

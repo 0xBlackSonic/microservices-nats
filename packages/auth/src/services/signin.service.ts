@@ -1,7 +1,7 @@
 import { AuthProviders } from "../enums/providers.enum";
-import { BadRequestError } from "../errors/bad-request.error";
 import { User, UserDoc } from "../models/user.model";
 import { HashUtils } from "../helpers/hash.utils";
+import { BadRequestError } from "@goblit/shared";
 
 interface IUserAccount {
   provider: AuthProviders;
