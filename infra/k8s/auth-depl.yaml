@@ -32,20 +32,14 @@ spec:
                   name: microservices-test
                   key: JWT_SECRET_KEY
             - name: JWT_EXPIRATION
-              valueFrom:
-                secretKeyRef:
-                  name: microservices-test
-                  key: JWT_EXPIRATION
+              value: "1m"
             - name: REFRESH_SECRET_KEY
               valueFrom:
                 secretKeyRef:
                   name: microservices-test
                   key: REFRESH_SECRET_KEY
             - name: REFRESH_EXPIRATION
-              valueFrom:
-                secretKeyRef:
-                  name: microservices-test
-                  key: REFRESH_EXPIRATION
+              value: "5m"
             - name: SEND_EMAIL
               value: "true"
             - name: NATS_URL
