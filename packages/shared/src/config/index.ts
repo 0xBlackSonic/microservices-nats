@@ -1,7 +1,3 @@
-import * as dotenv from "dotenv";
-
-dotenv.config();
-
 export const config = {
   sessions: {
     jwtKey: process.env.JWT_SECRET_KEY,

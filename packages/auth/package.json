@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "ts-node-dev src/index.ts",
-    "test": "DOTENV_CONFIG_PATH=.env.test jest --watchAll --no-cache --setupFiles=dotenv/config"
+    "test": "DOTENV_CONFIG_PATH=.env.test jest --no-cache --setupFiles=dotenv/config"
   },
   "jest": {
     "preset": "ts-jest",
@@ -23,7 +23,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@goblit/shared": "^0.0.5",
+    "@goblit/shared": "^0.0.6",
     "@nats-io/jetstream": "^3.0.0-26",
     "@nats-io/nats-core": "^3.0.0-38",
     "@nats-io/transport-node": "^3.0.0-24",

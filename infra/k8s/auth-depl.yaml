@@ -50,22 +50,6 @@ spec:
               value: "true"
             - name: NATS_URL
               value: "http://nats-srv:4222"
-            - name: SMTP_URL
-              value: "smtp.resend.com"
-            - name: SMTP_PORT
-              value: "587"
-            - name: SMTP_SECURE
-              value: "false"
-            - name: SMTP_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: microservices-test
-                  key: SMTP_USERNAME
-            - name: SMTP_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: microservices-test
-                  key: SMTP_PASSWORD
 
 ---
 apiVersion: v1

@@ -15,3 +15,11 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
+    - image: microservices/email
+      context: packages/email
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .

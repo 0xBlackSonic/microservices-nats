@@ -1,5 +1,4 @@
 import { smtpLoader } from "../loaders/smtp.loader";
-import { config } from "../configs";
 
 export interface MailOptions {
   from: string;
@@ -10,17 +9,15 @@ export interface MailOptions {
 
 class MailService {
   send(mailOptions: MailOptions): Promise<void> | undefined {
-    if (config.smtp.active) {
-      return new Promise((resolve, reject) => {
-        smtpLoader.transporter.sendMail(mailOptions, (err, info) => {
-          if (err) {
-            reject(err);
-          }
-          console.log(info);
-          resolve();
-        });
+    return new Promise((resolve, reject) => {
+      smtpLoader.transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          reject(err);
+        }
+        console.log(info);
+        resolve();
       });
-    }
+    });
   }
 }
 

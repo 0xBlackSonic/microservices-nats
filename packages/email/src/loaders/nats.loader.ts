@@ -1,13 +1,13 @@
 import { connect } from "@nats-io/transport-node";
 import { jetstream, jetstreamManager } from "@nats-io/jetstream";
+import { NatsConnection } from "@nats-io/nats-core/lib/core";
 import type { JetStreamClient, JetStreamManager } from "@nats-io/jetstream";
 import { config } from "../configs";
-import { NatsConnection } from "@nats-io/nats-core/lib/core";
 
 class NatsLoader {
+  private _client?: NatsConnection;
   private _jsManager?: JetStreamManager;
   private _jsClient?: JetStreamClient;
-  private _client?: NatsConnection;
 
   get jsManager() {
     if (!this._jsManager) {
