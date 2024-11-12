@@ -1,15 +1,9 @@
-import {
-  AckPolicy,
-  DeliverPolicy,
-  jetstream,
-  jetstreamManager,
-} from "@nats-io/jetstream";
+import { AckPolicy, DeliverPolicy } from "@nats-io/jetstream";
 import type {
   JetStreamClient,
   JetStreamManager,
   JsMsg,
 } from "@nats-io/jetstream";
-import { NatsConnection } from "@nats-io/nats-core";
 
 import { Subjects } from "./enums/subjects";
 
@@ -23,23 +17,22 @@ export abstract class Listener<T extends Event> {
   abstract queueName: string;
   abstract onMessage(data: T["data"], msg: JsMsg): void;
 
-  private _client: NatsConnection;
-  private _jsm?: JetStreamManager;
-  private _js?: JetStreamClient;
+  private _jsm: JetStreamManager;
+  private _js: JetStreamClient;
 
-  constructor(client: NatsConnection) {
-    this._client = client;
+  constructor(jsManager: JetStreamManager, jsClient: JetStreamClient) {
+    this._jsm = jsManager;
+    this._js = jsClient;
   }
 
-  private async _initialize() {
-    this._jsm = await jetstreamManager(this._client);
-    this._js = jetstream(this._client);
-
-    this._jsm.streams.add({
+  private async _createStream() {
+    await this._jsm.streams.add({
       name: this.subject.split(".")[0],
       subjects: [this.subject],
     });
+  }
 
+  private async _createConsumenr() {
     await this._jsm.consumers.add(this.subject.split(".")[0], {
       ack_policy: AckPolicy.Explicit,
       deliver_policy: DeliverPolicy.All,
@@ -48,9 +41,10 @@ export abstract class Listener<T extends Event> {
   }
 
   async listen() {
-    await this._initialize();
+    await this._createStream();
+    await this._createConsumenr();
 
-    const sub = await this._js!.consumers.get(
+    const sub = await this._js.consumers.get(
       this.subject.split(".")[0],
       this.queueName
     );

@@ -5,6 +5,7 @@ import { AuthProviders } from "../../enums/providers.enum";
 import { User } from "../../models/user.model";
 import { config } from "../../configs";
 import { AuthEmailSignupPublisher } from "../../events/publishers/auth-email-signup.publisher";
+import { natsLoader } from "../../loaders/nats.loader";
 
 const sleep = (ms: number): Promise<void> =>
   new Promise((resolve, reject) => {
@@ -193,7 +194,7 @@ describe("Auth Signup [With Email]", () => {
         })
         .expect(200);
 
-      expect(AuthEmailSignupPublisher.prototype.publish).toHaveBeenCalled();
+      expect(natsLoader.jsClient.publish).toHaveBeenCalled();
     });
   }
 });

@@ -1,12 +1,8 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 
-import { AuthEmailSignupPublisher } from "../events/publishers/auth-email-signup.publisher";
-
 jest.mock("../services/mail.service");
 jest.mock("../loaders/nats.loader");
-
-AuthEmailSignupPublisher.prototype.publish = jest.fn();
 
 let mongo: MongoMemoryServer | undefined;
 

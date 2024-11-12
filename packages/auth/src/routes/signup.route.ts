@@ -22,7 +22,10 @@ route.post(
 
     provider === AuthProviders.Email &&
       config.smtp.active &&
-      (await new AuthEmailSignupPublisher(natsLoader.client).publish({
+      (await new AuthEmailSignupPublisher(
+        natsLoader.jsManager,
+        natsLoader.jsClient
+      ).publish({
         email,
         accessToken: (userInstance.user as IEmailResponse).accessToken,
       }));
