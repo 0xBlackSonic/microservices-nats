@@ -19,7 +19,9 @@ export class SigninService {
 
   get user(): { user: UserDoc; jwt: string; refresh: string } {
     if (!this._user || !this._jwt || !this._refresh) {
-      throw new BadRequestError("User, JWT and Rfresh are not defined");
+      throw new BadRequestError(
+        "User, JWT token or Refresh token are not defined"
+      );
     }
 
     return {

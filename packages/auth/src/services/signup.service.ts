@@ -1,6 +1,10 @@
 import { BadRequestError } from "@goblit/shared";
+
 import { AuthProviders } from "../enums/providers.enum";
 import { User, UserDoc } from "../models/user.model";
+import { AuthEmailSignupPublisher } from "../events/publishers/auth-email-signup.publisher";
+import { natsLoader } from "../loaders/nats.loader";
+import { config } from "../configs";
 
 export interface IEmailResponse {
   user: UserDoc;
@@ -57,7 +61,7 @@ export class SignupService {
         await this._buildWithCredentials(email, password!, !!savedUser);
         break;
       case AuthProviders.Email:
-        await this._buidlWithEmail(email);
+        await this._buildWithEmail(email);
         break;
       default:
         throw new BadRequestError("Provider does not exist!");
@@ -84,12 +88,21 @@ export class SignupService {
     this._responseCode = 201;
   }
 
-  private async _buidlWithEmail(email: string): Promise<void> {
+  private async _buildWithEmail(email: string): Promise<void> {
     const { user, accessToken } = await User.buildSession({
       provider: this._provider,
       email,
     });
     await user.save();
+
+    config.smtp.active &&
+      (await new AuthEmailSignupPublisher(
+        natsLoader.jsManager,
+        natsLoader.jsClient
+      ).publish({
+        email,
+        accessToken,
+      }));
 
     this._user = user;
     this._accessToken = accessToken;
