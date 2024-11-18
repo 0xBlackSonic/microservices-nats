@@ -5,7 +5,7 @@
     "packages/*"
   ],
   "scripts": {
-    "start": "skaffold dev",
+    "start": "skaffold dev --no-prune=false --cache-artifacts=false",
     "test": "lerna run test"
   },
   "devDependencies": {

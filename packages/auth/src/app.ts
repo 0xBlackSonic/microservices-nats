@@ -11,11 +11,12 @@ import { protectedRouter } from "./routes/protected.route";
 import { refreshRouter } from "./routes/refresh-session.route";
 
 const app = express();
+app.set("trust proxy", true);
 app.use(json());
 app.use(
   cookieSession({
     signed: false,
-    secure: false,
+    secure: process.env.NODE_ENV !== "test",
   })
 );
 
