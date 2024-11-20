@@ -17,6 +17,10 @@ route.post("/api/auth/refresh", async (req: Request, res: Response) => {
 
   req.session = await newSession.refresh();
 
+  if (req.session === null) {
+    throw new AuthenticationError("Session is not valid");
+  }
+
   res.send({});
 });
 

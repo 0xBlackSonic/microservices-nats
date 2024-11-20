@@ -20,12 +20,16 @@ export class SignupService {
 
   constructor(private _provider: AuthProviders) {}
 
-  get user(): UserDoc | IEmailResponse {
+  get user(): UserDoc | IEmailResponse | null {
     if (!this._user) {
       throw new BadRequestError("User is not defined");
     }
 
-    if (this._provider !== AuthProviders.Credentials) {
+    if (this._provider === AuthProviders.Email) {
+      if (config.smtp.active) {
+        return null;
+      }
+
       return { user: this._user, accessToken: this._accessToken! };
     } else {
       return this._user;

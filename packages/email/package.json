@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@goblit/shared": "^0.0.6",
+    "@goblit/shared": "^0.0.7",
     "@nats-io/nats-core": "^3.0.0-38",
     "@nats-io/transport-node": "^3.0.0-24",
     "@types/nodemailer": "^6.4.16",
