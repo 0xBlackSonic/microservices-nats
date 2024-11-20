@@ -3,10 +3,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 
-import { Button } from "../button";
-import { Input } from "../input";
-import { Label } from "../label";
-import axios from "axios";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { useSession } from "../providers/session-provider";
 
 const schema = z.object({
   email: z.string().min(1, "Email is required").email("Wrong email format"),
@@ -16,6 +16,7 @@ const schema = z.object({
 type CredentialsForm = z.infer<typeof schema>;
 
 export const SignInCredentialsForm = () => {
+  const { signin } = useSession();
   const [serverErrors, setServerErrors] = useState<string[]>([]);
 
   const {
@@ -28,11 +29,7 @@ export const SignInCredentialsForm = () => {
 
   const onSubmit: SubmitHandler<CredentialsForm> = async (data) => {
     try {
-      await axios.post("/api/auth/signin", {
-        provider: "credentials",
-        email: data.email,
-        password: data.password,
-      });
+      await signin("credentials", data);
     } catch (err: any) {
       if (err.response.data.errors) {
         setServerErrors(

@@ -1,9 +1,11 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { ModeToggle } from "./mode-toggle";
 import { Button } from "./ui/button";
+import { useSession } from "./providers/session-provider";
 
 export const Navbar = () => {
   const navigate = useNavigate();
+  const { authUser, signout } = useSession();
 
   return (
     <nav className="flex px-[5%] py-4 justify-between items-center w-full border-b fixed">
@@ -28,22 +30,31 @@ export const Navbar = () => {
           >
             Home
           </NavLink>
-          <NavLink
-            to="/dashboard"
-            className={({ isActive }) =>
-              [
-                "mx-3 transition-all",
-                isActive ? "border-b border-b-white" : "border-b-0",
-              ].join(" ")
-            }
-          >
-            Dashboard
-          </NavLink>
+
+          {authUser && (
+            <NavLink
+              to="/dashboard"
+              className={({ isActive }) =>
+                [
+                  "mx-3 transition-all",
+                  isActive ? "border-b border-b-white" : "border-b-0",
+                ].join(" ")
+              }
+            >
+              Dashboard
+            </NavLink>
+          )}
         </div>
 
-        <Button className="mr-4" onClick={() => navigate("/signin")}>
-          Sign In
-        </Button>
+        {!authUser ? (
+          <Button className="mr-4" onClick={() => navigate("/signin")}>
+            Sign In
+          </Button>
+        ) : (
+          <Button className="mr-4" variant={"outline"} onClick={signout}>
+            Sign Out
+          </Button>
+        )}
 
         <ModeToggle />
       </div>

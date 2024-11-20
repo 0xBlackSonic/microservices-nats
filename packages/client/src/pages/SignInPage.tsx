@@ -1,10 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SignInCredentialsForm } from "@/components/ui/forms/SignInCredentialsForm";
-import { SignInEmailForm } from "@/components/ui/forms/SignInEmailForm";
-import { SignUpCredentialsForm } from "@/components/ui/forms/SignUpCredentialsForm";
+import { SignInCredentialsForm } from "@/components/forms/SignInCredentialsForm";
+import { SignInEmailForm } from "@/components/forms/SignInEmailForm";
+import { SignUpCredentialsForm } from "@/components/forms/SignUpCredentialsForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useSession } from "@/components/providers/session-provider";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function SignInPage() {
+  const navigate = useNavigate();
+  const { authUser } = useSession();
+
+  useEffect(() => {
+    if (authUser) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [authUser]);
+
   return (
     <section className="h-full">
       <div className="container mx-auto px-6 py-12 h-full flex flex-col items-center">

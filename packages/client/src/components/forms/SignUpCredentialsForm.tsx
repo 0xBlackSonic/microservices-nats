@@ -1,11 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import { Label } from "../label";
-import { Input } from "../input";
-import { Button } from "../button";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { useSession } from "../providers/session-provider";
 
 const schema = z
   .object({
@@ -23,6 +23,7 @@ const schema = z
 type CredentialsForm = z.infer<typeof schema>;
 
 export const SignUpCredentialsForm = () => {
+  const { signup } = useSession();
   const [serverErrors, setServerErrors] = useState<string[]>([]);
 
   const {
@@ -35,12 +36,7 @@ export const SignUpCredentialsForm = () => {
 
   const onSubmit: SubmitHandler<CredentialsForm> = async (data) => {
     try {
-      await axios.post("/api/auth/signup", {
-        provider: "credentials",
-        email: data.email,
-        password: data.password,
-        passwordConfirmation: data.passwordConfirmation,
-      });
+      await signup("credentials", data);
     } catch (err: any) {
       if (err.response.data.errors) {
         setServerErrors(
