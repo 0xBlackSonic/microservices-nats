@@ -2,6 +2,7 @@ import { AuthenticationError, jwtUtils, Payload } from "@goblit/shared";
 
 import { User } from "../models/user.model";
 import { HashUtils } from "../helpers/hash.utils";
+import { TokenExpiredError } from "jsonwebtoken";
 
 export interface RequestSession {
   jwt: string;
@@ -12,6 +13,10 @@ export class RefreshSession {
   constructor(private _session: RequestSession) {}
 
   async refresh() {
+    if (!this._accessTokenExpired()) {
+      throw new AuthenticationError("Session is not valid");
+    }
+
     try {
       const payload = jwtUtils.verifyRefresh(this._session.refresh);
 
@@ -30,7 +35,17 @@ export class RefreshSession {
 
       await User.removeSession(id, this._session.refresh);
 
-      throw new AuthenticationError("Session expired");
+      throw new AuthenticationError("Session is not valid");
+    }
+  }
+
+  private _accessTokenExpired() {
+    try {
+      jwtUtils.verifyJWT(this._session.jwt);
+
+      return false;
+    } catch (err) {
+      return !!(err instanceof TokenExpiredError);
     }
   }
 }

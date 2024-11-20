@@ -2,12 +2,12 @@ import { NextFunction, Request, Response } from "express";
 import { TokenExpiredError } from "jsonwebtoken";
 
 import { jwtUtils, Payload } from "../helpers/jwt.utils";
+import { SessionExpiredError } from "../errors/session-expired.error";
 
 declare global {
   namespace Express {
     interface Request {
       authUser: Payload;
-      jwtExpired: boolean;
     }
   }
 }
@@ -40,10 +40,7 @@ export const authUser = async (
     req.authUser = payload;
   } catch (err) {
     if (err instanceof TokenExpiredError) {
-      payload = jwtUtils.extractPayload(req.session!.jwt) as Payload;
-
-      req.authUser = payload;
-      req.jwtExpired = true;
+      throw new SessionExpiredError();
     }
   }
 

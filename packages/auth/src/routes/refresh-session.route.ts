@@ -13,11 +13,9 @@ route.post("/api/auth/refresh", async (req: Request, res: Response) => {
     throw new AuthenticationError("Session data missing");
   }
 
-  if (req.jwtExpired) {
-    const newSession = new RefreshSession(req.session as RequestSession);
+  const newSession = new RefreshSession(req.session as RequestSession);
 
-    req.session = await newSession.refresh();
-  }
+  req.session = await newSession.refresh();
 
   res.send({});
 });

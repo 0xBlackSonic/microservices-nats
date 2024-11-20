@@ -9,6 +9,7 @@ import { signinRouter } from "./routes/signin.route";
 import { signoutRouter } from "./routes/signout.route";
 import { protectedRouter } from "./routes/protected.route";
 import { refreshRouter } from "./routes/refresh-session.route";
+import { authUserRouter } from "./routes/auth-user";
 
 const app = express();
 app.set("trust proxy", true);
@@ -20,12 +21,14 @@ app.use(
   })
 );
 
+app.use(refreshRouter);
+
 app.use(authUser);
 
 app.use(signupRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
-app.use(refreshRouter);
+app.use(authUserRouter);
 app.use(protectedRouter);
 
 app.all("*", (req, res) => {
