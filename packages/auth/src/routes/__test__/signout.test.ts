@@ -36,25 +36,23 @@ describe("Auth Signout [With Credentials]", () => {
 
 describe("Auth Signout [With Email]", () => {
   it("returns an empty session when user signout with email and delete the refresh token associated", async () => {
-    const signin = await request(app)
-      .post("/api/auth/signup")
-      .send({
-        provider: AuthProviders.Email,
-        email: "test@test.com",
-      })
-      .expect(200);
+    const { user, accessToken } = await User.buildSession({
+      provider: AuthProviders.Email,
+      email: "test@test.com",
+    });
+    await user.save();
 
     const initial = await request(app)
       .post("/api/auth/signin")
       .send({
         provider: AuthProviders.Email,
         email: "test@test.com",
-        password: signin.body.accessToken,
+        password: accessToken,
       })
       .expect(200);
 
-    let user = await User.findById(initial.body.id);
-    expect(user!.sessions.length).toEqual(1);
+    let updatedUser = await User.findById(initial.body.id);
+    expect(updatedUser!.sessions.length).toEqual(1);
 
     const response = await request(app)
       .post("/api/auth/signout")
@@ -66,7 +64,7 @@ describe("Auth Signout [With Email]", () => {
       "session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; httponly"
     );
 
-    user = await User.findById(initial.body.id);
-    expect(user!.sessions.length).toEqual(0);
+    updatedUser = await User.findById(initial.body.id);
+    expect(updatedUser!.sessions.length).toEqual(0);
   });
 });

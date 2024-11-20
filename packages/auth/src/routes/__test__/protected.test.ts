@@ -2,6 +2,7 @@ import request from "supertest";
 
 import { app } from "../../app";
 import { AuthProviders } from "../../enums/providers.enum";
+import { User } from "../../models/user.model";
 
 describe("Protected [With Credentials]", () => {
   it("returns a 401 response when user is not authenticated", async () => {
@@ -29,20 +30,18 @@ describe("Protected [With Credentials]", () => {
 
 describe("Protected [With Email]", () => {
   it("returns a 200 response when user is authenticated with email", async () => {
-    const responseOne = await request(app)
-      .post("/api/auth/signup")
-      .send({
-        provider: AuthProviders.Email,
-        email: "test@test.com",
-      })
-      .expect(200);
+    const { user, accessToken } = await User.buildSession({
+      provider: AuthProviders.Email,
+      email: "test@test.com",
+    });
+    await user.save();
 
     const responseTwo = await request(app)
       .post("/api/auth/signin")
       .send({
         provider: AuthProviders.Email,
         email: "test@test.com",
-        password: responseOne.body.accessToken,
+        password: accessToken,
       })
       .expect(200);
 

@@ -220,24 +220,18 @@ describe("Auth Signin [With Email]", () => {
   });
 
   it("set accessToken state to false, set a cookie and returns a 200 response", async () => {
-    const responseOne = await request(app)
-      .post("/api/auth/signup")
-      .send({
-        provider: AuthProviders.Email,
-        email: "test@test.com",
-      })
-      .expect(200);
-
-    const user = await User.findOne({
+    const { user, accessToken } = await User.buildSession({
+      provider: AuthProviders.Email,
       email: "test@test.com",
     });
+    await user.save();
 
     const responseTwo = await request(app)
       .post("/api/auth/signin")
       .send({
         provider: AuthProviders.Email,
         email: "test@test.com",
-        password: responseOne.body.accessToken,
+        password: accessToken,
       })
       .expect(200);
 
