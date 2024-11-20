@@ -15,7 +15,7 @@ export default function SignInPage() {
     if (authUser) {
       navigate("/dashboard", { replace: true });
     }
-  }, [authUser]);
+  }, [navigate, authUser]);
 
   return (
     <section className="h-full">
