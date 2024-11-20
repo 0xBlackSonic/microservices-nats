@@ -156,10 +156,11 @@ userSchema.statics.removeSession = async (userId: string, token?: string) => {
   }
 
   if (user) {
-    user.sessions = token
-      ? user.sessions.filter((obj) => obj.sessionToken !== tokenHash)
-      : [];
-    await user.save();
+    await user.updateOne({
+      sessions: token
+        ? user.sessions.filter((obj) => obj.sessionToken !== tokenHash)
+        : [],
+    });
   }
 };
 
