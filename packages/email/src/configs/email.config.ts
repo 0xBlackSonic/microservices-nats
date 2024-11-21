@@ -4,8 +4,8 @@ export const emailConfig = {
   signup: {
     from: "no-reply@resend.dev",
     subject: "Passwordless Email SignIn (Test)",
-    baseUrl: "https://some-frontend-url.com",
-    verificationPath: "/auth/verify",
+    baseUrl: "https://microservices.local",
+    verificationPath: "/verify",
     template: function (email: string, accessToken: string) {
       return htmlTemplate({
         baseUrl: this.baseUrl,

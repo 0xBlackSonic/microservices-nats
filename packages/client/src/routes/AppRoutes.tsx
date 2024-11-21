@@ -1,10 +1,12 @@
+import { createBrowserRouter } from "react-router-dom";
+
 import App from "@/App";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import DashboardPage from "@/pages/DashboardPage";
 import HomePage from "@/pages/HomePage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import SignInPage from "@/pages/SignInPage";
-import { createBrowserRouter } from "react-router-dom";
+import VerifyPage from "@/pages/VerifyPage";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "/signin",
         element: <SignInPage />,
+      },
+      {
+        path: "/verify",
+        element: <VerifyPage />,
       },
       {
         path: "*",

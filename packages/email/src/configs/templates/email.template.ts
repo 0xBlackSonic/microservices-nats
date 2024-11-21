@@ -24,11 +24,6 @@ export const htmlTemplate = (data: ITemplate) => {
                   </div>
                 </td>
               </tr>
-              <tr >
-              	<td align="center" style="padding: 15px 0px;font-size: 14px; font-family: Helvetica, Arial, sans-serif; color: #555;">
-                  [ link: ${data.baseUrl}${data.path}/?email=${data.email}&accessToken=${data.accessToken} ]
-                </td>
-              </tr>
             </table>
           </td>
         </tr>
