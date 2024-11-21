@@ -12,7 +12,11 @@ Communication between services uses a PubSub pattern implemented with NATS JetSt
 4. [Ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/)
 5. [Skaffold](https://skaffold.dev/docs/install/)
 
-## Create environment variables
+_[ `ingress-nginx` uses port 80 any other service using this port must be stopped ]_
+
+## Initial settings
+
+### Create environment variables
 
 In each deployment configuration file, the non-sensitive environment variables must be defined in plain text. In the case of sensitive data, the Kubernetes Secret object must be used.
 
@@ -32,8 +36,24 @@ Check if everything is saved
 kubectl describe secret microservices-test
 ```
 
+### SMTP environment variables
+
+Set your SMTP server configuration in the email deployment config file, for this example [Resend](https://resend.com/) was used.
+
+### Add an alias to localhost in /etc/hosts
+
+Add to the `/etc/hosts` file the next line:
+
+```
+127.0.0.1 microservices.local
+```
+
 ## Run the project
 
 The project is organized as a monorepo using the latest version of lerna, so to install all dependencies run `npm install` in the root path.
 
 Once everything is installed run `npm start`.
+
+Go to your browser and access to `https://microservices.local`.
+
+_As the ingress-nginx certificate is self-signed, the browser does not recognize it as valid, you can continue by selecting `Advanced` and then `Proceed to microservices.local (unsafe)`, or in case this option is not shown you can directly type `thisisunsafe`._
