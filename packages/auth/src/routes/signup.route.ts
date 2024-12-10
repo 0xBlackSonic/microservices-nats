@@ -1,8 +1,11 @@
 import express, { Request, Response } from "express";
-import { requestValidation } from "@goblit/shared";
+import { BadRequestError, requestValidation } from "@goblit/shared";
 
 import { signupValidationsRules } from "./validations/signup.validation";
-import { SignupService } from "../services/signup.service";
+import { AuthProviders } from "../enums/providers.enum";
+import { SignupService } from "../services/signup/signup.service";
+import { SignupCredentialsService } from "../services/signup/signup-credentials.service";
+import { SignupEmailService } from "../services/signup/signup-email.service";
 
 const route = express.Router();
 
@@ -12,8 +15,19 @@ route.post(
   requestValidation,
   async (req: Request, res: Response) => {
     const { provider, email, password } = req.body;
+    let userInstance: SignupService;
 
-    const userInstance = new SignupService(provider);
+    switch (provider) {
+      case AuthProviders.Credentials:
+        userInstance = new SignupCredentialsService(provider);
+        break;
+      case AuthProviders.Email:
+        userInstance = new SignupEmailService(provider)
+        break;
+      default:
+        throw new BadRequestError("Provider does not exist!");
+    }
+    
     await userInstance.buildUser(email, password);
 
     req.session = userInstance.sessionTokens;
