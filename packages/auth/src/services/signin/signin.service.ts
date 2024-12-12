@@ -10,7 +10,7 @@ interface IUserAccount {
   expires?: number;
 }
 
-export interface Session {
+export interface ISession {
     user: UserDoc;
     jwt: string;
     refresh: string;
@@ -48,5 +48,5 @@ export abstract class SigninService {
     this._refresh = await this._user!.generateRefreshToken();
   }
   
-  abstract verify(email: string, password: string): Promise<Session>;
+  abstract verify(email: string, password: string): Promise<ISession>;
 }

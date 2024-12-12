@@ -16,9 +16,9 @@ declare global {
   Authenticated User Middleware
   =============================
 
-  Check if the user session is active, renew the JWT 
-  if it is needed, and inject a new attribute to the 
-  Request instance with the user payload data.
+  Check if the user session is active and inject a 
+  new attribute to the Request instance with the user 
+  payload data.
 
   This gives an easy way to have the user data anywhere.
 

@@ -1,13 +1,13 @@
 import { BadRequestError } from "@goblit/shared";
 import { AuthProviders } from "../../enums/providers.enum";
-import { Session, SigninService } from "./signin.service";
+import { ISession, SigninService } from "./signin.service";
 
 export class SigninEmailService extends SigninService {
   constructor(provider: AuthProviders) {
     super(provider);
   }
 
-  async verify(email: string, password: string): Promise<Session> {
+  async verify(email: string, password: string): Promise<ISession> {
     await this._verifyUser(email, password);
 
     if (!this._userAccount!.active) {

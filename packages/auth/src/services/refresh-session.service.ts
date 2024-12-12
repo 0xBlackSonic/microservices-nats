@@ -1,9 +1,8 @@
-import { AuthenticationError, jwtUtils, Payload } from "@goblit/shared";
+import { jwtUtils } from "@goblit/shared";
 
 import { User } from "../models/user.model";
 import { HashUtils } from "../helpers/hash.utils";
 import { TokenExpiredError } from "jsonwebtoken";
-import { Request } from "express";
 
 export interface RequestSession {
   jwt: string;

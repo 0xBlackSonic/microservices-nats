@@ -7,10 +7,9 @@ export const signinValidationRules = [
     .trim()
     .custom((value, { req }) => {
       if (
-        req.body.provider === AuthProviders.Credentials &&
-        (value.length < 6 || value.length > 20)
+        req.body.provider === AuthProviders.Credentials && !value
       ) {
-        throw new Error("Password must be between 6 and 20 characters");
+        throw new Error("Password is required");
       }
 
       if (req.body.provider === AuthProviders.Email && !value) {
